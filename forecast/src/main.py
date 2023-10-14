@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from router import forecast_router
+
 
 
 def get_application() -> FastAPI:
@@ -18,7 +20,7 @@ def get_application() -> FastAPI:
         allow_headers=["*"],
     )
 
-    application.include_router(forecast)
+    application.include_router(forecast_router)
     return application
 
 
