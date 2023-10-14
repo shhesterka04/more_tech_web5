@@ -1,0 +1,308 @@
+[
+  {
+    "numIndividuals": 3,
+    "numLegalEntities": 1,
+    "hour": 10,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 3,
+    "numLegalEntities": 0,
+    "hour": 11,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 4,
+    "numLegalEntities": 2,
+    "hour": 12,
+    "day": "Monday"
+  }, 		
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 3,
+    "hour": 13,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 2,
+    "numLegalEntities": 1,
+    "hour": 14,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 6,
+    "numLegalEntities": 3,
+    "hour": 15,
+    "day": "Monday"
+  },
+{
+    "numIndividuals": 8,
+    "numLegalEntities": 3,
+    "hour": 16,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 7,
+    "numLegalEntities": 4,
+    "hour": 17,
+    "day": "Monday"
+  },
+  {
+    "numIndividuals": 12,
+    "numLegalEntities": 4,
+    "hour": 18,
+    "day": "Monday"
+  },
+{
+    "numIndividuals": 10,
+    "numLegalEntities": 6,
+    "hour": 19,
+    "day": "Monday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 0,
+    "hour": 10,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 1,
+    "hour": 11,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 3,
+    "hour": 12,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 2,
+    "hour": 13,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 7,
+    "numLegalEntities": 4,
+    "hour": 14,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 3,
+    "hour": 15,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 8,
+    "numLegalEntities": 5,
+    "hour": 16,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 10,
+    "numLegalEntities": 4,
+    "hour": 17,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 12,
+    "numLegalEntities": 3,
+    "hour": 18,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 13,
+    "numLegalEntities": 2,
+    "hour": 19,
+    "day": "Tuesday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 0,
+    "hour": 10,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 4,
+    "numLegalEntities": 2,
+    "hour": 11,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 4,
+    "numLegalEntities": 1,
+    "hour": 12,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 8,
+    "numLegalEntities": 4,
+    "hour": 13,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 7,
+    "numLegalEntities": 4,
+    "hour": 14,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 2,
+    "hour": 15,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 3,
+    "hour": 16,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 7,
+    "numLegalEntities": 2,
+    "hour": 17,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 7,
+    "numLegalEntities": 1,
+    "hour": 18,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 11,
+    "numLegalEntities": 2,
+    "hour": 19,
+    "day": "Wednesday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 1,
+    "hour": 10,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 0,
+    "hour": 11,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 8,
+    "numLegalEntities": 4,
+    "hour": 12,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 9	,
+    "numLegalEntities": 2,
+    "hour": 13,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 10,
+    "numLegalEntities": 3,
+    "hour": 14,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 8,
+    "numLegalEntities": 1,
+    "hour": 15,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 9,
+    "numLegalEntities": 2	,
+    "hour": 14,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 2,
+    "hour": 15,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 3,
+    "hour": 16,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 1,
+    "hour": 17,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 12,
+    "numLegalEntities": 4,
+    "hour": 18,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 14,
+    "numLegalEntities": 1,
+    "hour": 19,
+    "day": "Thursday"
+  },
+{
+    "numIndividuals": 2,
+    "numLegalEntities": 3,
+    "hour": 10,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 3,
+    "numLegalEntities": 1,
+    "hour": 11,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 3,
+    "hour": 12,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 4,
+    "hour": 13,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 6,
+    "numLegalEntities": 2,
+    "hour": 14,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 4,
+    "numLegalEntities": 4,
+    "hour": 15,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 5,
+    "numLegalEntities": 1,
+    "hour": 16,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 9,
+    "numLegalEntities": 3,
+    "hour": 17,
+    "day": "Friday"
+  },
+{
+    "numIndividuals": 11,
+    "numLegalEntities": 1,
+    "hour": 18,
+    "day": "Friday"
+  }
+]
