@@ -3,12 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/handlers"
 	"log"
+	"math/rand"
 	"moretech-backend/more_tech_web5/maps"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
+
+	"github.com/gorilla/handlers"
 
 	"github.com/gorilla/mux"
 )
@@ -98,19 +101,37 @@ func GetNumById(branchId string) int {
 } // получение загруженности отделения по его id
 
 type OneBranchInfo struct {
-	Cur  int     // текущая загруженность
-	Tble [][]int // загруженность на каждый час на 7 дней
+	Cur  int     `json:"cur"`
+	Tble [][]int `json:"tble"`
+}
+type ForecastData struct {
+	NumIndividuals   int `json:"numIndividualClients"`
+	NumLegalEntities int `json:"numLegalEntities"`
 }
 
 func GetOneBranch(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("http://localhost:8000/forecast/")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var data []ForecastData
+	json.NewDecoder(resp.Body).Decode(&data)
 	branchId := mux.Vars(r)["branchId"]
-	cur := GetNumById(branchId)
+	index, _ := strconv.Atoi(branchId)
+	cur := data[index%56].NumIndividuals % 10
 	tble := make([][]int, 7)
 
 	for i := 0; i < 7; i++ {
 		tble[i] = make([]int, 24)
 	}
-
+	for i := 0; i < 7; i++ {
+		for j := 0; j < 24; j++ {
+			if j >= 9 && j <= 17 {
+				tble[i][j] = rand.Intn(10)
+			}
+		}
+	}
 	res := &OneBranchInfo{}
 	res.Cur = cur
 	res.Tble = tble
@@ -121,7 +142,7 @@ func GetOneBranch(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	fmt.Fprintf(w, "%s", b)
+	w.Write(b)
 }
 
 func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
@@ -217,6 +238,7 @@ func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
 	r := mux.NewRouter()
 	file1, err := os.Open("more_tech_web5/repository/offices.json")
 	if err != nil {
