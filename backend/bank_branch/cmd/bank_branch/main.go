@@ -6,11 +6,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
 
 var Offices []Office
+var Atms []Atm
 
 type Office struct {
 	id            int
@@ -43,6 +45,48 @@ type Office struct {
 	NumEntitiesClients    int     `json:"numEntitiesClients"`
 	NumWindowsPrivelege   int     `json:"numWindowsPrivelege"`
 	NumPrivelegeClients   int     `json:"numPrivelegeClients"`
+}
+type Services struct {
+	Wheelchair struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"wheelchair"`
+	Blind struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"blind"`
+	NfcForBankCards struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"nfcForBankCards"`
+	QrRead struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"qrRead"`
+	SupportsUsd struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"supportsUsd"`
+	SupportsChargeRub struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"supportsChargeRub"`
+	SupportsEur struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"supportsEur"`
+	SupportsRub struct {
+		ServiceCapability string `json:"serviceCapability"`
+		ServiceActivity   string `json:"serviceActivity"`
+	} `json:"supportsRub"`
+}
+type Atm struct {
+	id        int
+	Address   string   `json:"address"`
+	Latitude  float64  `json:"latitude"`
+	Longitude float64  `json:"longitude"`
+	AllDay    bool     `json:"allDay"`
+	Services  Services `json:"services"`
 }
 
 // TO DO
@@ -79,44 +123,95 @@ func GetOneBranch(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
-	isOffice := r.URL.Query().Get("isOffice")
-	qr := r.URL.Query().Get("qr")
-	nfc := r.URL.Query().Get("nfc")
-	blind := r.URL.Query().Get("blind")
-	wheelchair := r.URL.Query().Get("wheelchair")
-	face := r.URL.Query().Get("face")
-	allday := r.URL.Query().Get("allday")
+	data := make(map[string]string)
 
+	data["isOffice"] = r.URL.Query().Get("isOffice")
+	data["qr"] = r.URL.Query().Get("qr")
+	data["nfc"] = r.URL.Query().Get("nfc")
+	data["blind"] = r.URL.Query().Get("blind")
+	data["wheelchair"] = r.URL.Query().Get("wheelchair")
+	data["face"] = r.URL.Query().Get("face")
+	data["allday"] = r.URL.Query().Get("allday")
+	data["officetype"] = r.URL.Query().Get("officetype")
+
+	if data["isOffice"] == "1" {
+		var Out []Office
+		for i := 0; i < len(Offices); i++ {
+			if data["officetype"] == "1" && (strings.Contains(Offices[i].OfficeType, "Да") || strings.Contains(Offices[i].OfficeType, "да")) ||
+				Offices[i].SalePointFormat == "Универсальный" ||
+				data["face"] == "0" && Offices[i].SalePointFormat == "Розничный" {
+				Out = append(Out, Offices[i])
+			}
+
+		}
+		b, err := json.Marshal(Out)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Fprintf(w, "%s", b)
+	} else {
+		var Out []Atm
+		for i := 0; i < len(Atms); i++ {
+			if data["qr"] == "1" && Atms[i].Services.QrRead.ServiceCapability != "UNSUPPORTED" ||
+				data["nfc"] == "1" && Atms[i].Services.NfcForBankCards.ServiceCapability != "UNSUPPORTED" ||
+				data["blind"] == "1" && Atms[i].Services.Blind.ServiceCapability != "UNSUPPORTED" ||
+				data["wheelchair"] == "1" && Atms[i].Services.Wheelchair.ServiceCapability != "UNSUPPORTED" ||
+				data["allday"] == "1" && Atms[i].AllDay {
+				Out = append(Out, Atms[i])
+			}
+		}
+		b, err := json.Marshal(Out)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Fprintf(w, "%s", b)
+	}
 }
 func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
 
 }
 func main() {
-	r := mux.NewRouter()
-	file, err := os.Open("updated_data.json")
+	//r := mux.NewRouter()
+	file1, err := os.Open("Offices.json")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	defer file.Close()
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&Offices)
+	file2, err := os.Open("Atms.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file1.Close()
+	defer file2.Close()
+	err = json.NewDecoder(file1).Decode(&Offices)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = json.NewDecoder(file2).Decode(&Atms)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for i := 0; i < len(Offices); i++ {
 		Offices[i].id = i
 	}
-
-	r.HandleFunc("/api/branches/{branchId}", GetOneBranch)
-	r.HandleFunc("/api/branches", GetBranchesByFilter)
-	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
-	{
-		err := http.ListenAndServe(":80", r)
-
-		if err != nil {
-			log.Fatal(err)
-		}
+	for i := 0; i < len(Atms); i++ {
+		Atms[i].id = i
 	}
+	for i := 0; i < len(Atms); i++ {
+		fmt.Println(Atms[i].Services.QrRead.ServiceCapability)
+	}
+	// r.HandleFunc("/api/branches/{branchId}", GetOneBranch)
+	// r.HandleFunc("/api/branches", GetBranchesByFilter)
+	// r.HandleFunc("/api/branches/recommended", GetRecomBranch)
+	// {
+	// 	err := http.ListenAndServe(":80", r)
+
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// }
 
 }
