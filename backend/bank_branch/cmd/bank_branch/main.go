@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"moretech-backend/maps"
 	"net/http"
 	"os"
 	"strings"
@@ -133,7 +134,27 @@ func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
 	data["face"] = r.URL.Query().Get("face")
 	data["allday"] = r.URL.Query().Get("allday")
 	data["officetype"] = r.URL.Query().Get("officetype")
+	flag := true
 
+	for _, v := range data {
+		if v != "" {
+			flag = false
+			break
+		}
+	}
+	if flag {
+		a, err := json.Marshal(Atms)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, err := json.Marshal(Offices)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write(b)
+		w.Write(a)
+	}
 	if data["isOffice"] == "1" {
 		var Out []Office
 		for i := 0; i < len(Offices); i++ {
@@ -149,7 +170,7 @@ func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(w, "%s", b)
+		w.Write(b)
 	} else {
 		var Out []Atm
 		for i := 0; i < len(Atms); i++ {
@@ -166,14 +187,26 @@ func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(w, "%s", b)
+		w.Write(b)
 	}
 }
 func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
+	var data maps.MapRoute
+	json.NewDecoder(r.Body).Decode(&data)
+	result, err := maps.FetchRoute(data.Start, data.End, data.TransportType)
+	if err != nil {
+		log.Fatal(err)
+	}
+	b, err := json.Marshal(result)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(b)
 }
+
 func main() {
-	//r := mux.NewRouter()
+	r := mux.NewRouter()
 	file1, err := os.Open("Offices.json")
 	if err != nil {
 		fmt.Println(err)
@@ -200,18 +233,15 @@ func main() {
 	for i := 0; i < len(Atms); i++ {
 		Atms[i].id = i
 	}
-	for i := 0; i < len(Atms); i++ {
-		fmt.Println(Atms[i].Services.QrRead.ServiceCapability)
-	}
-	// r.HandleFunc("/api/branches/{branchId}", GetOneBranch)
-	// r.HandleFunc("/api/branches", GetBranchesByFilter)
-	// r.HandleFunc("/api/branches/recommended", GetRecomBranch)
-	// {
-	// 	err := http.ListenAndServe(":80", r)
+	r.HandleFunc("/api/branch/{branchId}", GetOneBranch)
+	r.HandleFunc("/api/branches", GetBranchesByFilter)
+	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
+	{
+		err := http.ListenAndServe(":80", r)
 
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// }
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 }
