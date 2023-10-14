@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func FetchRoute(start Coordinates, end Coordinates, transportType string) ([][]float64, error) {
+func FetchRoute(start Coordinates, end Coordinates, transportType string) (*Result, error) {
 	url := fmt.Sprintf("https://router.project-osrm.org/route/v1/%s/%f,%f;%f,%f?overview=full&geometries=geojson",
 		transportType,
 		start.Longitude, start.Latitude,
@@ -31,15 +31,22 @@ func FetchRoute(start Coordinates, end Coordinates, transportType string) ([][]f
 	}
 
 	if len(routeResponse.Routes) > 0 {
-		geoJSONData, ok := routeResponse.Routes[0].Geometry.(map[string]interface{})
-		if ok {
-			var coords [][]float64
-			for _, coord := range geoJSONData["coordinates"].([]interface{}) {
-				point := []float64{coord.([]interface{})[0].(float64), coord.([]interface{})[1].(float64)}
-				coords = append(coords, point)
-			}
-			return coords, nil
+		coords := routeResponse.Routes[0].Geometry.Coordinates
+
+		// Инвертирование координат для Яндекс Карт
+		for i, coord := range coords {
+			coords[i] = []float64{coord[1], coord[0]}
 		}
+
+		result := &Result{
+			Path: GeoJSON{
+				Type:        "LineString",
+				Coordinates: coords,
+			},
+			Duration: routeResponse.Routes[0].Duration,
+		}
+
+		return result, nil
 	}
 
 	return nil, fmt.Errorf("No route found or unexpected format")

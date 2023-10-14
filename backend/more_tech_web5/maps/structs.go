@@ -1,9 +1,14 @@
 package maps
 
+type Coordinates struct {
+	Latitude  float64
+	Longitude float64
+}
+
 type RouteResponse struct {
 	Routes []struct {
-		Geometry interface{} `json:"geometry"`
-		Duration float64     `json:"duration"`
+		Geometry GeoJSON `json:"geometry"`
+		Duration float64 `json:"duration"`
 	} `json:"routes"`
 }
 
@@ -15,10 +20,6 @@ type GeoJSON struct {
 type Result struct {
 	Path     GeoJSON `json:"path"`
 	Duration float64 `json:"duration"`
-}
-type Coordinates struct {
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
 }
 
 type MapRoute struct {

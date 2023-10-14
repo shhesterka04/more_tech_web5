@@ -3,8 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/handlers"
 	"log"
-	"moretech-backend/maps"
+	"moretech-backend/more_tech_web5/maps"
 	"net/http"
 	"os"
 	"strings"
@@ -191,33 +192,44 @@ func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close() // Закрыть тело запроса после чтения
+
 	var data maps.MapRoute
-	json.NewDecoder(r.Body).Decode(&data)
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		return
+	}
+
 	result, err := maps.FetchRoute(data.Start, data.End, data.TransportType)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	b, err := json.Marshal(result)
 
+	b, err := json.Marshal(result)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
 	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
 }
 
 func main() {
 	r := mux.NewRouter()
-	file1, err := os.Open("Offices.json")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	file2, err := os.Open("Atms.json")
+	file1, err := os.Open("offices.json")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer file1.Close()
+
+	file2, err := os.Open("atms.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	defer file2.Close()
 	err = json.NewDecoder(file1).Decode(&Offices)
 	if err != nil {
@@ -237,7 +249,7 @@ func main() {
 	r.HandleFunc("/api/branches", GetBranchesByFilter)
 	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
 	{
-		err := http.ListenAndServe(":80", r)
+		err := http.ListenAndServe(":80", handlers.CORS()(r))
 
 		if err != nil {
 			log.Fatal(err)
