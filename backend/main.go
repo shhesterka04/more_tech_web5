@@ -6,14 +6,14 @@ import (
 	"more_tech_web5/backend/maps"
 )
 
-//55.789268,37.540339 - старт
+//55.814396, 38.978727 - старт
 
-//55.781400,37.532215 - финиш
+//55.813799, 38.976005 - финиш
 
 func main() {
-	start := maps.Coordinates{Latitude: 37.540339, Longitude: 55.789268}
-	end := maps.Coordinates{Latitude: 37.532215, Longitude: 55.781400}
-	transportType := "car" // или "walk", "bike" и т.д.
+	start := maps.Coordinates{Latitude: 55.814396, Longitude: 38.978727}
+	end := maps.Coordinates{Latitude: 55.813799, Longitude: 38.976005}
+	transportType := "car" // или "foot", "bike" и т.д.
 
 	result, err := maps.FetchRoute(start, end, transportType)
 	if err != nil {

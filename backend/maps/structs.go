@@ -7,8 +7,8 @@ type Coordinates struct {
 
 type RouteResponse struct {
 	Routes []struct {
-		Geometry interface{} `json:"geometry"`
-		Duration float64     `json:"duration"`
+		Geometry GeoJSON `json:"geometry"`
+		Duration float64 `json:"duration"`
 	} `json:"routes"`
 }
 
