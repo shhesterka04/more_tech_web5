@@ -11,9 +11,9 @@ import (
 //55.781400,37.532215 - финиш
 
 func main() {
-	start := maps.Coordinates{Latitude: 37.540339, Longitude: 55.789268} // Берлин
-	end := maps.Coordinates{Latitude: 37.532215, Longitude: 55.781400}   // Париж
-	transportType := "car"                                               // или "walking", "cycling" и т.д.
+	start := maps.Coordinates{Latitude: 37.540339, Longitude: 55.789268}
+	end := maps.Coordinates{Latitude: 37.532215, Longitude: 55.781400}
+	transportType := "car" // или "walk", "bike" и т.д.
 
 	result, err := maps.FetchRoute(start, end, transportType)
 	if err != nil {
