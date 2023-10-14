@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func FetchRoute(start Coordinates, end Coordinates, transportType string) (Result, error) {
+func FetchRoute(start Coordinates, end Coordinates, transportType string) ([][]float64, error) {
 	url := fmt.Sprintf("https://router.project-osrm.org/route/v1/%s/%f,%f;%f,%f?overview=full&geometries=geojson",
 		transportType,
 		start.Longitude, start.Latitude,
@@ -15,34 +15,32 @@ func FetchRoute(start Coordinates, end Coordinates, transportType string) (Resul
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return Result{}, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return Result{}, err
+		return nil, err
 	}
 
 	var routeResponse RouteResponse
 	err = json.Unmarshal(body, &routeResponse)
 	if err != nil {
-		return Result{}, err
+		return nil, err
 	}
 
-	var result Result
 	if len(routeResponse.Routes) > 0 {
 		geoJSONData, ok := routeResponse.Routes[0].Geometry.(map[string]interface{})
 		if ok {
-			result.Path.Type = geoJSONData["type"].(string)
+			var coords [][]float64
 			for _, coord := range geoJSONData["coordinates"].([]interface{}) {
 				point := []float64{coord.([]interface{})[0].(float64), coord.([]interface{})[1].(float64)}
-				result.Path.Coordinates = append(result.Path.Coordinates, point)
+				coords = append(coords, point)
 			}
-			result.Duration = routeResponse.Routes[0].Duration
+			return coords, nil
 		}
-		return result, nil
 	}
 
-	return Result{}, fmt.Errorf("No route found")
+	return nil, fmt.Errorf("No route found or unexpected format")
 }
