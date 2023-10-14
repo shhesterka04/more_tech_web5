@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"moretech-backend/maps"
 	"net/http"
 	"os"
 	"strings"
@@ -190,8 +191,20 @@ func GetBranchesByFilter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
+	var data maps.MapRoute
+	json.NewDecoder(r.Body).Decode(&data)
+	result, err := maps.FetchRoute(data.Start, data.End, data.TransportType)
+	if err != nil {
+		log.Fatal(err)
+	}
+	b, err := json.Marshal(result)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(b)
 }
+
 func main() {
 	r := mux.NewRouter()
 	file1, err := os.Open("Offices.json")
@@ -220,10 +233,7 @@ func main() {
 	for i := 0; i < len(Atms); i++ {
 		Atms[i].id = i
 	}
-	// for i := 0; i < len(Atms); i++ {
-	// 	fmt.Println(Atms[i].Services.QrRead.ServiceCapability)
-	// }
-	r.HandleFunc("/api/branches/{branchId}", GetOneBranch)
+	r.HandleFunc("/api/branch/{branchId}", GetOneBranch)
 	r.HandleFunc("/api/branches", GetBranchesByFilter)
 	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
 	{
