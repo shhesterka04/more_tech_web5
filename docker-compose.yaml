@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "127.0.0.1:9042:9042" # Явное указание IP-адреса хоста
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra # Явное указание broadcast адреса
+      - CASSANDRA_LISTEN_ADDRESS=localhost     # Адрес прослушивания внутри контейнера
+      - CASSANDRA_CLUSTER_NAME=myCluster      # Название кластера
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    volumes:
+      - cassandra_data:/var/lib/cassandra:rw  # Явное указание режима чтения/записи
+
+volumes:
+  cassandra_data: # Определение именованного тома для постоянного хранения данных
+
+
