@@ -240,14 +240,14 @@ func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	r := mux.NewRouter()
-	file1, err := os.Open("more_tech_web5/repository/offices.json")
+	file1, err := os.Open("../repository/offices.json")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer file1.Close()
 
-	file2, err := os.Open("more_tech_web5/repository/atms.json")
+	file2, err := os.Open("../repository/atms.json")
 	if err != nil {
 		fmt.Println(err)
 		return
