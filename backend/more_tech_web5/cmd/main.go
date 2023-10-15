@@ -266,7 +266,7 @@ func main() {
 	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
 	{
 		headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-		originsOk := handlers.AllowedOrigins([]string{"http://localhost:3001"})
+		originsOk := handlers.AllowedOrigins([]string{"http://localhost:3001", "http://localhost:3000"})
 		methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 		err := http.ListenAndServe(":8080", handlers.CORS(originsOk, headersOk, methodsOk)(r))
