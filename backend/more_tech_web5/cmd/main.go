@@ -94,12 +94,6 @@ type Atm struct {
 	Services  Services `json:"services"`
 }
 
-// TO DO
-func GetNumById(branchId string) int {
-
-	return 2
-} // получение загруженности отделения по его id
-
 type OneBranchInfo struct {
 	Cur  int     `json:"cur"`
 	Tble [][]int `json:"tble"`
@@ -240,14 +234,14 @@ func GetRecomBranch(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	r := mux.NewRouter()
-	file1, err := os.Open("../repository/offices.json")
+	file1, err := os.Open("more_tech_web5/repository/offices.json")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer file1.Close()
 
-	file2, err := os.Open("../repository/atms.json")
+	file2, err := os.Open("more_tech_web5/repository/offices.json")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -271,7 +265,7 @@ func main() {
 	r.HandleFunc("/api/branches", GetBranchesByFilter)
 	r.HandleFunc("/api/branches/recommended", GetRecomBranch)
 	{
-		err := http.ListenAndServe(":8080", handlers.CORS()(r))
+		err := http.ListenAndServe(":8080", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r))
 
 		if err != nil {
 			log.Fatal(err)
